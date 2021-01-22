@@ -15,8 +15,8 @@ function createItemsList(quantityItems, quantityEmails) {
 
       items.push(item);
       quantityItems--;
-    }
-  }
+    };
+  };
 
   if (quantityEmails) {
     while (quantityEmails > 0) {
@@ -24,12 +24,13 @@ function createItemsList(quantityItems, quantityEmails) {
 
       emails.push(email);
       quantityEmails--;
-    }
-  }
+    };
+  };
 
-  const data = { [ITEMS]: items, [EMAILS]: emails };
+  const data = [{ [ITEMS]: items, [EMAILS]: emails }];
   return data;
-}
+};
+
 
 function calculateItemsList(items) {
   const total = items.reduce((acc, item) => {
@@ -38,33 +39,53 @@ function calculateItemsList(items) {
   }, 0);
 
   return total
-}
+};
+
 
 function divideItemsList(total, emails) {
   const division = Math.floor(total / emails.length);
-  const rest = total - (division * emails.length);
-  const emailsToDivide = emails[rest];
-  console.log(emailsToDivide)
-  return
-}
+  let rest = total - (division * emails.length);
+
+  const distributeDivision = emails.map(email => {
+    return { [email]: division };
+  });
+
+  while (rest > 0) {
+    const key = Object.keys(distributeDivision[rest])[0];
+    distributeDivision[rest][key]++;
+    rest--;
+  };
+
+  return distributeDivision;
+};
+
 
 function processItemsList(data) {
-  if (!data.items.length || !data.emails.length) {
-    return "Sua lista de emails e/ou itens está vazia";
+  try {
+    if ((Array.isArray(data) && !data.length) ||
+      (data[0].items && !data[0].items.length) ||
+      (data[0].emails && !data[0].emails.length)) {
+        throw "Your list of items or emails is empty";
+    };
+  
+    const total = calculateItemsList(data[0].items);
+  
+    if (total === 0) {
+      throw "Your list of items can't be divided, result is zero";
+    };
+  
+    const result = divideItemsList(total, data[0].emails);
+    return result;
+
+  } catch (err) {
+    throw err;
   }
+};
 
-  const total = calculateItemsList(data.items);
-
-  if (total === 0) {
-    return "Sua lista de itens não pode ser dividida";
-  }
-
-  const result = divideItemsList(total, data.emails)
-
-  return
-}
 
 module.exports = {
   createItemsList,
+  calculateItemsList,
+  divideItemsList,
   processItemsList
-}
+};

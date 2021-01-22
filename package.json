@@ -2,6 +2,10 @@
   "name": "challenge-stone",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
   "repository": "https://github.com/analimazn/challenge-stone.git",
   "author": "Ana Lima <analimazn@gmail.com>",
   "license": "MIT",
