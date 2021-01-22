@@ -7,7 +7,7 @@ function writeFile(path, content) {
     };
 
     fs.writeFileSync(path, JSON.stringify(content));
-    const result = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const result = readFile(path)
     return result;
 
   } catch (err) {
@@ -15,4 +15,14 @@ function writeFile(path, content) {
   };
 };
 
-module.exports = { writeFile }
+function readFile(path) {
+  try {
+    const data = JSON.parse(fs.readFileSync(path, 'utf8'));
+    return data;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { writeFile, readFile }
