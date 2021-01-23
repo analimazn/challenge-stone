@@ -10,15 +10,11 @@ npm: 7.4.0
 3. [Inicializando a aplicação](#run-app)
 4. [Testes](#run-tests)
 5. [Estrutura do Projeto](#concept-of-structure)
-    1. [Sobre Logos](#logos-folder)
-    2. [Sobre Public](#public-folder)
-    3. [Sobre Controllers](#controllers-folder)
-    4. [Sobre DB](#db-folder)
-    5. [Sobre Models](#models-folder)
-    6. [Sobre Services](#services-folder)
-    7. [Sobre Utils](#utils-folder)
-6. [Dependências do projeto](#dependencies)
-7. [Dependências de desenvolvimento](#dev-dependencies)
+    1. [Sobre data](#data-folder)
+    2. [Sobre src/services](#services-folder)
+    3. [Sobre tests/mocks](#tests-mocks)
+    4. [Sobre tests/services](#tests-services)
+6. [Dependências de desenvolvimento](#dev-dependencies)
 
 ## Desafio
 
@@ -39,26 +35,63 @@ A função deve:
     
 ## Instalação
 
-Para instalar as dependências utilize as linhas de comando do [`yarn`](https://classic.yarnpkg.com/en/docs/cli/install/) ou [`npm`](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+Para instalar as dependências utilize as linhas de comando do [`yarn`](https://classic.yarnpkg.com/en/docs/cli/install/) ou [`npm`](https://docs.npmjs.com/getting-started/installing-npm-packages-locally), demonstradas a seguir:
 
 ```sh
-yarn install
+  yarn install
 ```
 
 ```sh
-npm install
+  npm install
 ```
 
 ## Inicializando a aplicação
 
-É 
+Caso você deseje realizar o procedimento com a lista de valores randômicos que é gerada automaticamente, utilize o comando a seguir:
 
 ```sh
-npm start
+  npm run randomValues <QUANTITY_ITEMS> <QUANTITY_EMAILS>
 ```
 
-O projeto rodará localmente na porta especificada no arquivo `.env`, de acordo com o exemplo `http://localhost:PORT/`. Caso nenhuma porta seja especificada a execução ocorrerá na porta padrão `3000` e você poderá acessar pelo endereço [http://localhost:3000/](http://localhost:3000/).
+**QUANTITY_ITEMS**: Valor inteiro da quantidade de itens que deseja processar.
 
+**QUANTITY_EMAILS**: Valor inteiro da quantidade de emails que deseja processar.
+
+Com essa opção, o programa irá gerar uma lista de `items` e `emails` aleatórios e irá armazená-la no arquivo `data/input.json`.
+
+
+Caso contrário, utilize o comando a seguir:
+
+```sh
+  npm run specificValues
+```
+
+Com essa opção, o programa irá apenas realizar a leitura do arquivo `data/input.json` com os valores informados por você. Os valores desejados devem estar no seguinte padrão:
+
+```sh
+[
+  {
+    "items": [
+      {
+        "item"     : <type: String>,
+        "quantity" : <type: Integer>,
+        "price"    : <type: Integer>
+      }
+    ],
+    "emails": [
+      <type: Integer>
+    ]
+  }
+]
+```
+
+## Testes
+
+Para executar os testes, utilize o comando a seguir:
+
+```sh
+  npm run test
+```
 
 ## Estrutura do projeto
 
@@ -83,149 +116,24 @@ O projeto rodará localmente na porta especificada no arquivo `.env`, de acordo 
             processItems.test.js
 ```
 
-### Diretório **`data**
+### Diretório **data**
 
-O diretório `data` contém os arquivos de .
-
-
-### Diretório **public**
-
-O diretório `public` contém um arquivo estático `.json` com as informações dos Meetups para a região de Joinville.
+O diretório `data` contém os arquivos de entrada e saída.
 
 
-### Diretório **DB**
+### Diretório **src/services**
 
-O diretório DB contém os arquivos necessários para a criação das tabelas e inserção dos dados, de acordo com a biblioteca`knex`.
+O diretório `src/services` contém o arquivo `file.js`, responsável por realizar a leitura/escrita dos dados, e o arquivo `processItems.js`, responsável por processar os itens da lista.
 
-**migrations**: Arquivos `.js` com a estrutura das tabelas.
+### Diretório **tests/mocks**
 
-**seeds**: Arquivos `.js` que realizam a leitura dos dados do arquivo estático localizado em `/public` e insere-os nas tabelas criadas.
-
-
-### Diretório **models**
-
-O diretório de `models` contém as queries que serão executadas no banco de dados para filtrar as informações necessárias.
+O diretório `tests/mocks` contém o arquivo de entrada com os dados para realizar os testes.
 
 
-### Diretório **services**
+### Diretório **tests/services**
 
-O diretório de `services` disponibiliza os dados retornados pela `model` em uma formatação padronizada.
-
-
-### Diretório **controllers**
-
-O diretório de `controllers` é responsável por controlar a comunicação entre as requisições feitas do cliente para com a aplicação.
-Todas as requisições recebidas possuem um `service` que será responsável por realizar a conexão com o banco de dados e retornar o dado no formato padrão.
-
-
-### Diretório **utils**
-
-O diretório de `utils` contém funções genéricas que podem auxiliar em pequenas formatações de dados na aplicação.
-
-
-### Arquivo **routes**
-
-O arquivo de `routes.js` contém todas as rotas disponíveis na aplicação:
-
-- Os métodos disponíveis são ( **GET** )
-
-
-**GET** /meetups -> Retorna via `.json` todos os meetups cadastrados no banco de dados, de acordo com o seguinte formato:
-
-```
-{
-  "success" : <type: Boolean>,
-  "message" : <type: String>,
-  "data" : [
-    {
-      "id"         : <type: Integer>,
-      "name"       : <type: String>,
-      "description": <type: String>,
-      "url_logo"   : <type: String>,
-      "next_event": {
-        "id"            : <type: Integer>,
-        "title"         : <type: String>,
-        "datetime_init" : <type: DateTime_TZ>,
-        "datetime_end"  : <type: DateTime_TZ>
-      }
-    }
-  ]
-}
-```
-
-
-**GET** /events/past/:meetupId -> Retorna via `.json` os eventos já realizados de um determinado meetup, de acordo com o seguinte formato:
-
-```
-{
-  "success" : <type: Boolean>,
-  "message" : <type: String>,
-  "data" : [
-    {
-      "id"            : <type: Integer>,
-      "title"         : <type: String>,
-      "datetime_init" : <type: DateTime_TZ>,
-      "datetime_end"  : <type: DateTime_TZ>,
-      "participants"  : <type: Integer>,
-      "meetup_id"     : <type: Integer>,
-      "address" {
-        "place"         : <type: String>,
-        "neighborhood"  : <type: String>,
-        "street"        : <type: String>,
-        "number"        : <type: Integer>,
-        "code"          : <type: String>,
-        "city"          : <type: String>,
-        "uf"            : <type: String>,
-        "country"       : <type: String>
-      }
-    }
-  ]
-}
-```
-
-
-**GET** /events/current/:meetupId -> Retorna via `.json` os próximos eventos de um determinado meetup, de acordo com o seguinte formato:
-
-```
-{
-  "success" : <type: Boolean>,
-  "message" : <type: String>,
-  "data" : [
-    {
-      "id"            : <type: Integer>,
-      "title"         : <type: String>,
-      "datetime_init" : <type: DateTime_TZ>,
-      "datetime_end"  : <type: DateTime_TZ>,
-      "participants"  : <type: Integer>,
-      "meetup_id"     : <type: Integer>,
-      "address" {
-        "place"         : <type: String>,
-        "neighborhood"  : <type: String>,
-        "street"        : <type: String>,
-        "number"        : <type: Integer>,
-        "code"          : <type: String>,
-        "city"          : <type: String>,
-        "uf"            : <type: String>,
-        "country"       : <type: String>
-      }
-    }
-  ]
-}
-```
-
-
-## Dependências
-
-- [dotenv](https://www.npmjs.com/package/dotenv): Carrega variáveis de ambiente a partir de um arquivo `.env` dentro de `process.env`.
-- [express](https://expressjs.com/): Framework para servidor web.
-- [cors](https://www.npmjs.com/package/cors): CORS é um pacote `node.js` que pode ser utilizado para habilitar conexões para o servidor `express`.
-- [moment](https://momentjs.com/): Biblioteca responsável por validar e manipular datas.
-- [pg](https://node-postgres.com/): Cliente PostgreSQL para NodeJS.
-- [knex](http://knexjs.org/): Biblioteca para criação de queries SQL.
-
+O diretório `tests/services` contêm os arquivos de testes para os serviços criados em `src/services`.
 
 ## Dependências de desenvolvimento
 
-- [nodemon](https://nodemon.io/): Biblioteca responsável por recarregar o servidor a cada atualização feita no projeto.
-- [sqlite3](https://www.npmjs.com/package/sqlite3): Cliente SQLite para NodeJS.
-
+- [jest](https://jestjs.io/): Framework responsável por automatizar testes.

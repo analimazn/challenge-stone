@@ -12,7 +12,7 @@ const {
   processItemsList
 } = require('../../src/services/processItems');
 
-INPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'input.json');
+const INPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'input.json');
 
 describe('Test ProcessItems Service', () => {
   test('CreateItemsList must return an Array', () => {

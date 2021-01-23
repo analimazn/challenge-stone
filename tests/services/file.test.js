@@ -6,8 +6,8 @@ const {
   readFile
 } = require('../../src/services/file');
 
-INPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'input.json');
-OUTPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'output.json');
+const INPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'input.json');
+const OUTPUT_PATH = path.resolve(__dirname, '..', 'mocks', 'output.json');
 
 describe('Test File Service', () => {
   test('ValidatePath must return True', () => {
