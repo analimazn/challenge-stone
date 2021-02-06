@@ -79,7 +79,7 @@ Com essa opção, o programa irá apenas realizar a leitura do arquivo `data/inp
       }
     ],
     "emails": [
-      <type: Integer>
+      <type: String>
     ]
   }
 ]
