@@ -1,13 +1,13 @@
 const path = require('path');
 
 const {
-	createItemsList,
-	processItemsList
+  createItemsList,
+  processItemsList
 } = require('./src/services/processItems');
 
 const {
-	writeFile,
-	readFile
+  writeFile,
+  readFile
 } = require('./src/services/file');
 
 const INPUT_PATH = path.resolve(__dirname, 'data', 'input.json');
